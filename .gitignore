@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+frontend/.next/
+frontend/out/
+
+# Go
+backend/bin/
+*.exe
+
+# Env
+.env
+.env.local
+backend/.env
+
+# OS
+.DS_Store
+__MACOSX/
+
+# IDE
+.idea/
+.vscode/

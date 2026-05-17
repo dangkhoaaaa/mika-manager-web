@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Images Snap Scroll</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.css"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #000;
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      padding: 32px;
+      color: #f1f1f1;
+    }
+
+    .bg-layer {
+      position: absolute;
+      inset: 0;
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transform-origin: center center;
+      z-index: 0;
+      will-change: transform, opacity;
+    }
+
+    .bg-layer.active {
+      opacity: 1;
+    }
+
+    #section1 .bg-layer {
+      opacity: 1;
+    }
+
+    #section1 .bg-layer.base {
+      z-index: 0;
+    }
+
+    #section1 .bg-layer.overlay-1 {
+      z-index: 2;
+    }
+
+    #section1 .bg-layer.overlay-2 {
+      z-index: 3;
+    }
+
+    #section1 .bg-layer.overlay-bottom-half {
+      inset: auto 0 0 0;
+      height: 50vh;
+      background-size: 100% 100%;
+      background-position: center bottom;
+    }
+
+    .section::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.08);
+      z-index: 1;
+    }
+
+    .section h1 {
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      font-size: clamp(36px, 7vw, 96px);
+      line-height: 1;
+      letter-spacing: 1px;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+      will-change: transform, opacity;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: transparent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 22px;
+      z-index: 10;
+    }
+
+    .navbar .logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f1f1f1;
+      letter-spacing: 1px;
+    }
+
+    .navbar .links {
+      display: flex;
+      gap: 16px;
+      white-space: nowrap;
+      font-size: 0.95rem;
+    }
+
+    .navbar .links a {
+      text-decoration: none;
+      color: #f1f1f1;
+      opacity: 0.95;
+      cursor: pointer;
+    }
+
+    .scroll-text {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      color: #f1f1f1;
+      opacity: 0.85;
+      z-index: 5;
+      margin: 0;
+    }
+
+    .scroll-text.left {
+      left: -6px;
+    }
+
+    .scroll-text.right {
+      right: -6px;
+    }
+
+    .line {
+      position: fixed;
+      top: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 2px;
+      background: #f1f1f1;
+      z-index: 10;
+      transform-origin: left center;
+    }
+
+    .fp-tableCell {
+      display: table-cell;
+      vertical-align: middle;
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes kenBurns {
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+      100% {
+        transform: scale(1.1) translate(-1.5%, -1%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">SNAP SCROLL</div>
+    <div class="links">
+      <a id="link1">01</a>
+      <a id="link2">02</a>
+      <a id="link3">03</a>
+      <a id="link4">04</a>
+    </div>
+  </nav>
+
+  <div class="line"></div>
+  <h2 class="scroll-text left">SCROLL</h2>
+  <h2 class="scroll-text right">DOWN</h2>
+
+  <div id="fullpage">
+    <section id="section1" class="section" data-bg="#111111" data-text-color="#f1f1f1">
+      <div class="bg-layer base active" style="background-image: url('./Image-1.png')"></div>
+      <div class="bg-layer overlay-1" style="background-image: url('./Image-2.png')"></div>
+      <div class="bg-layer overlay-2 overlay-bottom-half" style="background-image: url('./Image-3.png')"></div>
+      <h1>SECTION 1</h1>
+    </section>
+    <section id="section2" class="section" data-bg="#0d0d0d" data-text-color="#f1f1f1">
+      <div class="bg-layer active" style="background-image: url('./Image-3.png')"></div>
+      <div class="bg-layer" style="background-image: url('./Image-4.png')"></div>
+      <h1>SECTION 2</h1>
+    </section>
+    <section id="section3" class="section" data-bg="#121212" data-text-color="#f1f1f1">
+      <div class="bg-layer active" style="background-image: url('./Image-5.png')"></div>
+      <div class="bg-layer" style="background-image: url('./Image-6.png')"></div>
+      <h1>SECTION 3</h1>
+    </section>
+    <section id="section4" class="section" data-bg="#171717" data-text-color="#f1f1f1">
+      <div class="bg-layer active" style="background-image: url('./Image-9.png')"></div>
+      <div class="bg-layer" style="background-image: url('./Image-8.png')"></div>
+      <h1>SECTION 4</h1>
+    </section>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const sections = Array.from(document.querySelectorAll(".section"));
+
+      function setupSectionOneStack(section) {
+        const layers = Array.from(section.querySelectorAll(".bg-layer"));
+        const baseLayer = layers[0];
+        const overlayOne = layers[1];
+        const overlayTwo = layers[2];
+        let timeline = null;
+
+        function resetState() {
+          gsap.set(baseLayer, { opacity: 1, yPercent: 0, scale: 1 });
+          gsap.set(overlayOne, { opacity: 0, yPercent: 26, scale: 1 });
+          gsap.set(overlayTwo, { opacity: 0, yPercent: 34, scale: 1 });
+        }
+
+        function start() {
+          if (timeline) {
+            return;
+          }
+          resetState();
+          timeline = gsap.timeline();
+
+          timeline.to(
+            baseLayer,
+            {
+              scale: 1.08,
+              xPercent: -1,
+              yPercent: -0.6,
+              duration: 5.4,
+              ease: "sine.inOut"
+            },
+            0
+          );
+
+          timeline.to(
+            overlayOne,
+            {
+              opacity: 1,
+              yPercent: 0,
+              duration: 1.1,
+              ease: "power3.out"
+            },
+            0.35
+          );
+
+          timeline.to(
+            overlayTwo,
+            {
+              opacity: 1,
+              yPercent: 0,
+              duration: 1.1,
+              ease: "power3.out"
+            },
+            0.95
+          );
+
+          timeline.to(
+            [overlayOne, overlayTwo],
+            {
+              yPercent: -1.1,
+              duration: 2.4,
+              ease: "sine.inOut"
+            },
+            2.1
+          );
+        }
+
+        function stop() {
+          if (!timeline) {
+            return;
+          }
+          timeline.kill();
+          timeline = null;
+          resetState();
+        }
+
+        return { play: start, stop: stop };
+      }
+
+      function setupSectionSlideshow(section, intervalMs) {
+        const layers = Array.from(section.querySelectorAll(".bg-layer"));
+        if (layers.length <= 1) {
+          return { play: function () {}, stop: function () {} };
+        }
+
+        let index = 0;
+        let timer = null;
+
+        function playKenBurns(layer) {
+          gsap.fromTo(
+            layer,
+            { scale: 1, xPercent: 0, yPercent: 0 },
+            {
+              scale: 1.12,
+              xPercent: -1.8,
+              yPercent: -1,
+              duration: intervalMs / 1000 + 0.8,
+              ease: "sine.inOut"
+            }
+          );
+        }
+
+        function show(nextIndex) {
+          const current = layers[index];
+          const next = layers[nextIndex];
+          gsap.killTweensOf(current);
+          gsap.killTweensOf(next);
+          gsap.to(current, { opacity: 0, duration: 0.9, ease: "power2.out" });
+          gsap.fromTo(next, { opacity: 0 }, { opacity: 1, duration: 1, ease: "power2.out" });
+          layers.forEach(function (l) { l.classList.remove("active"); });
+          next.classList.add("active");
+          playKenBurns(next);
+          index = nextIndex;
+        }
+
+        function start() {
+          if (timer) {
+            return;
+          }
+          playKenBurns(layers[index]);
+          timer = setInterval(function () {
+            const nextIndex = (index + 1) % layers.length;
+            show(nextIndex);
+          }, intervalMs);
+        }
+
+        function stop() {
+          if (!timer) {
+            return;
+          }
+          clearInterval(timer);
+          timer = null;
+        }
+
+        return { play: start, stop: stop };
+      }
+
+      function setupTwoLayerSection(section, mode) {
+        const layers = Array.from(section.querySelectorAll(".bg-layer"));
+        const baseLayer = layers[0];
+        const overlayLayer = layers[1];
+        let timeline = null;
+
+        function resetState() {
+          gsap.set(baseLayer, { opacity: 1, yPercent: 0, scale: 1, xPercent: 0 });
+          if (mode === "zoom") {
+            gsap.set(overlayLayer, { opacity: 1, scale: 1, yPercent: 0 });
+          } else {
+            gsap.set(overlayLayer, { opacity: 0, yPercent: 24, scale: 1 });
+          }
+        }
+
+        function start() {
+          if (timeline) {
+            return;
+          }
+          resetState();
+          timeline = gsap.timeline();
+
+          if (mode === "zoom") {
+            timeline.fromTo(
+              overlayLayer,
+              { scale: 1, opacity: 0.75 },
+              { scale: 1.16, opacity: 1, duration: 3.6, ease: "power2.out" },
+              0
+            );
+          } else {
+            timeline.fromTo(
+              overlayLayer,
+              { opacity: 0, yPercent: 100 },
+              {
+                opacity: 1,
+                yPercent: 0,
+                duration: 1.2,
+                ease: "power4.out"
+              },
+              0
+            );
+          }
+        }
+
+        function stop() {
+          if (!timeline) {
+            return;
+          }
+          timeline.kill();
+          timeline = null;
+          resetState();
+        }
+
+        return { play: start, stop: stop };
+      }
+
+      const sectionPlayers = new Map();
+      sections.forEach(function (section, i) {
+        if (section.id === "section1") {
+          sectionPlayers.set(section, setupSectionOneStack(section));
+        } else if (section.id === "section2" || section.id === "section3") {
+          sectionPlayers.set(section, setupTwoLayerSection(section, "rise"));
+        } else if (section.id === "section4") {
+          sectionPlayers.set(section, setupTwoLayerSection(section, "zoom"));
+        } else {
+          sectionPlayers.set(section, setupSectionSlideshow(section, 4200));
+        }
+      });
+
+      function activateSection(section) {
+        sectionPlayers.forEach(function (player, key) {
+          if (key === section) {
+            player.play();
+          } else {
+            player.stop();
+          }
+        });
+      }
+
+      new fullpage("#fullpage", {
+        scrollingSpeed: 1000,
+        autoScrolling: true,
+        scrollHorizontally: true,
+        navigation: false,
+        afterLoad: function (_, destination) {
+          activateSection(destination.item);
+        },
+        onLeave: function (origin, destination) {
+          const leavingText = origin.item.querySelector("h1");
+          const enteringText = destination.item.querySelector("h1");
+          const line = document.querySelector(".line");
+          const navbarText = document.querySelectorAll(".navbar a, .navbar .logo");
+          const scrollTexts = document.querySelectorAll(".scroll-text");
+
+          gsap.to(leavingText, {
+            opacity: 0,
+            y: -100,
+            duration: 0.8,
+            ease: "power2.out"
+          });
+
+          gsap.fromTo(
+            enteringText,
+            { y: 100, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              color: destination.item.getAttribute("data-text-color"),
+              duration: 1,
+              ease: "power2.out",
+              delay: 0.1
+            }
+          );
+
+          const newTextColor = destination.item.getAttribute("data-text-color");
+          gsap.to(navbarText, { color: newTextColor, duration: 0.5 });
+          gsap.to(scrollTexts, { color: newTextColor, duration: 0.5 });
+          gsap.to(line, { backgroundColor: newTextColor, duration: 0.5 });
+
+          const newLineWidth = (destination.index + 1) * 150;
+          gsap.to(line, {
+            width: newLineWidth + "px",
+            duration: 0.8,
+            ease: "power2.out"
+          });
+
+          activateSection(destination.item);
+        }
+      });
+
+      activateSection(document.getElementById("section1"));
+
+      document.getElementById("link1").addEventListener("click", function () {
+        fullpage_api.moveTo(1);
+      });
+      document.getElementById("link2").addEventListener("click", function () {
+        fullpage_api.moveTo(2);
+      });
+      document.getElementById("link3").addEventListener("click", function () {
+        fullpage_api.moveTo(3);
+      });
+      document.getElementById("link4").addEventListener("click", function () {
+        fullpage_api.moveTo(4);
+      });
+    });
+  </script>
+</body>
+</html>
