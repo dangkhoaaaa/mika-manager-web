@@ -5,6 +5,7 @@ frontend/out/
 
 # Go
 backend/bin/
+backend/app
 *.exe
 
 # Env

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { api, API_URL } from "@/lib/api";
@@ -32,6 +32,14 @@ import clsx from "clsx";
 type Tab = "board" | "bugs" | "features" | "releases" | "api";
 
 export default function ProjectDetailPage() {
+  return (
+    <Suspense fallback={<p className="p-8 text-zinc-500">Loading project...</p>}>
+      <ProjectDetailContent />
+    </Suspense>
+  );
+}
+
+function ProjectDetailContent() {
   const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const [project, setProject] = useState<Project | null>(null);
