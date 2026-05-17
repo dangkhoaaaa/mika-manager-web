@@ -15,9 +15,16 @@ type Config struct {
 }
 
 func Load() Config {
+	mongoURI := os.Getenv("MONGODB_URI")
+	if mongoURI == "" {
+		mongoURI = os.Getenv("MONGO_URI")
+	}
+	if mongoURI == "" {
+		mongoURI = "mongodb://localhost:27017"
+	}
 	return Config{
 		Port:          getEnv("PORT", "8080"),
-		MongoURI:      getEnv("MONGODB_URI", "mongodb://localhost:27017"),
+		MongoURI:      mongoURI,
 		MongoDatabase: getEnv("MONGODB_DATABASE", "mika_manager"),
 		JWTSecret:     getEnv("JWT_SECRET", "dev-secret-change-in-production"),
 		PublicAPIURL:  os.Getenv("PUBLIC_API_URL"),
