@@ -47,7 +47,7 @@ export default function LoginPage() {
     >
         <div className="text-center mb-8">
           <div className="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 items-center justify-center text-lg font-bold mb-4">
-            PC
+            MK
           </div>
           <h1 className="text-2xl font-bold">Chào mừng trở lại</h1>
           <p className="text-muted-foreground mt-1">Đăng nhập để tiếp tục hành trình học tập</p>

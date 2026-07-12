@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Progress Challenge",
+  title: "MiKa Progress Challenge",
   description: "Cam kết mục tiêu học tập dài hạn, ghi nhận tiến độ hàng ngày",
 };
 

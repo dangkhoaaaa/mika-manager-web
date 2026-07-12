@@ -66,7 +66,7 @@ export function Sidebar() {
         <div className="p-5 border-b border-white/5">
           <Link href="/dashboard" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold">
-              PC
+              MK
             </div>
             <span className="font-semibold text-sm">
               Progress <span className="gradient-text">Challenge</span>
