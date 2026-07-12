@@ -133,6 +133,16 @@ func (db *DB) ensureIndexes(ctx context.Context) error {
 			{Keys: bson.D{{Key: "token", Value: 1}}, Options: options.Index().SetUnique(true)},
 			{Keys: bson.D{{Key: "email", Value: 1}}},
 		}},
+		{"goal_tasks", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "goalId", Value: 1}, {Key: "order", Value: 1}}},
+			{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "goalId", Value: 1}}},
+		}},
+		{"compare_shares", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "shareId", Value: 1}}, Options: options.Index().SetUnique(true)},
+		}},
+		{"user_preferences", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "userId", Value: 1}}, Options: options.Index().SetUnique(true)},
+		}},
 	}
 
 	for _, pc := range pcIndexes {

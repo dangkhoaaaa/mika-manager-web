@@ -44,9 +44,15 @@ func New(cfg config.Config, db *database.DB) http.Handler {
 	achieveSvc := &service.AchievementService{DB: db}
 	cloudClient := cloudinary.New(cfg.CloudinaryCloudName, cfg.CloudinaryAPIKey, cfg.CloudinaryAPISecret)
 
+	predictSvc := &service.PredictionService{DB: db}
+	compareSvc := &service.CompareService{DB: db}
+
 	goalH := &handler.GoalHandler{DB: db, Stats: statsSvc, Achieve: achieveSvc}
 	logH := &handler.DailyLogHandler{DB: db, Stats: statsSvc, Achieve: achieveSvc, Goal: goalH}
+	goalTaskH := &handler.GoalTaskHandler{DB: db, Goal: goalH}
 	dashboardH := &handler.DashboardHandler{DB: db}
+	analyticsH := &handler.AnalyticsHandler{DB: db}
+	compareH := &handler.CompareHandler{DB: db, CompareSvc: compareSvc, PredictSvc: predictSvc}
 	profileH := &handler.ProfileHandler{DB: db}
 	socialH := &handler.SocialHandler{DB: db}
 	pcNotifH := &handler.PCNotificationHandler{DB: db}
@@ -78,6 +84,8 @@ func New(cfg config.Config, db *database.DB) http.Handler {
 		api.With(authmw.OptionalJWT(cfg.JWTSecret)).Get("/pc/social/comments/{targetID}", socialH.ListComments)
 		api.Get("/pc/social/cheers/{userID}", socialH.ListCheers)
 
+		api.With(authmw.OptionalJWT(cfg.JWTSecret)).Get("/pc/compare/share/{shareID}", compareH.GetShare)
+
 		api.Route("/public/{slug}", func(pub chi.Router) {
 			pub.Post("/bugs", publicH.ReportBug)
 			pub.Post("/features", publicH.RequestFeature)
@@ -96,6 +104,14 @@ func New(cfg config.Config, db *database.DB) http.Handler {
 			protected.Route("/pc", func(pc chi.Router) {
 				pc.Get("/dashboard", dashboardH.Get)
 				pc.Get("/statistics", dashboardH.Statistics)
+				pc.Get("/analytics", analyticsH.Advanced)
+				pc.Get("/calendar", analyticsH.Calendar)
+				pc.Get("/timeline", analyticsH.GitTimeline)
+				pc.Get("/replay", compareH.Replay)
+				pc.Get("/preferences", compareH.PreferencesGet)
+				pc.Patch("/preferences", compareH.PreferencesUpdate)
+				pc.Post("/compare", compareH.Compare)
+				pc.Post("/compare/share", compareH.Share)
 				pc.Get("/logs/today", logH.Today)
 
 				pc.Get("/goals", goalH.List)
@@ -110,6 +126,13 @@ func New(cfg config.Config, db *database.DB) http.Handler {
 					g.Get("/gallery", goalH.Gallery)
 					g.Get("/logs", logH.List)
 					g.Post("/logs", logH.Create)
+					g.Get("/tasks", goalTaskH.List)
+					g.Post("/tasks", goalTaskH.Create)
+					g.Patch("/tasks/reorder", goalTaskH.Reorder)
+					g.Get("/tasks/dependencies", goalTaskH.Dependencies)
+					g.Get("/prediction", compareH.Predict)
+					g.Patch("/tasks/{taskID}", goalTaskH.Update)
+					g.Delete("/tasks/{taskID}", goalTaskH.Delete)
 				})
 				pc.Patch("/logs/{logID}", logH.Update)
 				pc.Delete("/logs/{logID}", logH.Delete)

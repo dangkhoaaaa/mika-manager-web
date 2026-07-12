@@ -17,6 +17,10 @@ import {
   LogOut,
   Menu,
   Plus,
+  Swords,
+  Calendar,
+  GitCommit,
+  LineChart,
 } from "lucide-react";
 import { cn, getInitials } from "@/lib/utils";
 import { useAuthStore, useUIStore } from "@/lib/store";
@@ -27,6 +31,10 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/goals", label: "Mục tiêu", icon: Target },
   { href: "/statistics", label: "Thống kê", icon: BarChart3 },
+  { href: "/analytics", label: "Analytics", icon: LineChart },
+  { href: "/calendar", label: "Lịch", icon: Calendar },
+  { href: "/timeline", label: "Timeline", icon: GitCommit },
+  { href: "/compare", label: "So sánh", icon: Swords },
   { href: "/achievements", label: "Thành tựu", icon: Trophy },
   { href: "/gallery", label: "Gallery", icon: Image },
   { href: "/explore", label: "Khám phá", icon: Users },

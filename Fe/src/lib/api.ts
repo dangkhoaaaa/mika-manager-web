@@ -273,4 +273,103 @@ export const searchApi = {
     >("/pc/users/suggested"),
 };
 
+// Goal Tasks
+export const tasksApi = {
+  list: (goalId: string) =>
+    request<import("./types").GoalTask[]>(`/pc/goals/${goalId}/tasks`),
+  create: (goalId: string, body: Partial<import("./types").GoalTask>) =>
+    request<import("./types").GoalTask>(`/pc/goals/${goalId}/tasks`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  update: (goalId: string, taskId: string, body: Partial<import("./types").GoalTask>) =>
+    request<import("./types").GoalTask>(`/pc/goals/${goalId}/tasks/${taskId}`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    }),
+  delete: (goalId: string, taskId: string) =>
+    request<void>(`/pc/goals/${goalId}/tasks/${taskId}`, { method: "DELETE" }),
+  reorder: (goalId: string, order: string[]) =>
+    request<{ ok: boolean }>(`/pc/goals/${goalId}/tasks/reorder`, {
+      method: "PATCH",
+      body: JSON.stringify({ order }),
+    }),
+  dependencies: (goalId: string) =>
+    request<import("./types").TaskDependencyNode[]>(
+      `/pc/goals/${goalId}/tasks/dependencies`
+    ),
+  prediction: (goalId: string) =>
+    request<import("./types").GoalPrediction>(`/pc/goals/${goalId}/prediction`),
+};
+
+// Analytics
+export const analyticsApi = {
+  advanced: (period = "monthly") =>
+    request<import("./types").AdvancedAnalytics>(`/pc/analytics?period=${period}`),
+  calendar: (year?: number, month?: number) => {
+    const qs = new URLSearchParams();
+    if (year) qs.set("year", String(year));
+    if (month) qs.set("month", String(month));
+    const q = qs.toString();
+    return request<{
+      year: number;
+      month: number;
+      days: import("./types").CalendarDay[];
+    }>(`/pc/calendar${q ? `?${q}` : ""}`);
+  },
+  timeline: () =>
+    request<import("./types").GitTimelineNode[]>("/pc/timeline"),
+  replay: (goalId?: string) =>
+    request<import("./types").ReplayFrame[]>(
+      `/pc/replay${goalId ? `?goalId=${goalId}` : ""}`
+    ),
+};
+
+// Compare
+export const compareApi = {
+  compare: (body: {
+    userBId: string;
+    goalAId?: string;
+    goalBId?: string;
+    range?: string;
+    startDate?: string;
+    endDate?: string;
+  }) =>
+    request<{
+      userA: import("./types").CompareStats;
+      userB: import("./types").CompareStats;
+      range: string;
+      startDate: string;
+      endDate: string;
+    }>("/pc/compare", { method: "POST", body: JSON.stringify(body) }),
+  share: (body: {
+    userBId: string;
+    goalAId?: string;
+    goalBId?: string;
+    range?: string;
+    startDate?: string;
+    endDate?: string;
+  }) =>
+    request<{ shareId: string }>("/pc/compare/share", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  getShare: (shareId: string) =>
+    request<{
+      userA: import("./types").CompareStats;
+      userB: import("./types").CompareStats;
+      range: string;
+    }>(`/pc/compare/share/${shareId}`),
+};
+
+// Preferences
+export const preferencesApi = {
+  get: () => request<import("./types").UserPreferences>("/pc/preferences"),
+  update: (body: Partial<import("./types").UserPreferences>) =>
+    request<import("./types").UserPreferences>("/pc/preferences", {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    }),
+};
+
 export { ApiError };

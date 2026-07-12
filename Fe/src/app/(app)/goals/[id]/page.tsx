@@ -29,6 +29,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GoalTasksPanel } from "@/components/goals/goal-tasks-panel";
+import { GoalDependencyGraph } from "@/components/goals/goal-dependency-graph";
+import { PredictionWidget } from "@/components/goals/prediction-widget";
+import { ReplayJourney } from "@/components/goals/replay-journey";
 import { cn, formatHours, formatDate, daysRemaining } from "@/lib/utils";
 
 export default function GoalDetailPage() {
@@ -172,6 +177,15 @@ export default function GoalDetailPage() {
         </div>
       </FadeIn>
 
+      <Tabs defaultValue="overview">
+        <TabsList>
+          <TabsTrigger value="overview">Tổng quan</TabsTrigger>
+          <TabsTrigger value="tasks">Tasks</TabsTrigger>
+          <TabsTrigger value="prediction">Dự đoán</TabsTrigger>
+          <TabsTrigger value="replay">Replay</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <FadeIn delay={0.05} className="lg:col-span-1">
           <Card glass className="flex flex-col items-center py-8">
@@ -373,6 +387,23 @@ export default function GoalDetailPage() {
           </CardContent>
         </Card>
       </FadeIn>
+        </TabsContent>
+
+        <TabsContent value="tasks">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <GoalTasksPanel goalId={id} />
+            <GoalDependencyGraph goalId={id} />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="prediction">
+          <PredictionWidget goalId={id} />
+        </TabsContent>
+
+        <TabsContent value="replay">
+          <ReplayJourney goalId={id} />
+        </TabsContent>
+      </Tabs>
     </PageTransition>
   );
 }

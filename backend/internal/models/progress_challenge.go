@@ -161,3 +161,67 @@ var AchievementDefs = map[string]struct {
 	"first_goal":     {"First Goal", "Create your first learning goal", "🎯"},
 	"goal_complete":  {"Goal Crusher", "Complete your first goal", "✨"},
 }
+
+// Goal task statuses
+const (
+	GoalTaskTodo       = "todo"
+	GoalTaskInProgress = "in_progress"
+	GoalTaskDone       = "task_done"
+	GoalTaskBlocked    = "blocked"
+)
+
+type GoalTask struct {
+	ID             primitive.ObjectID   `bson:"_id,omitempty" json:"id"`
+	GoalID         primitive.ObjectID   `bson:"goalId" json:"goalId"`
+	UserID         primitive.ObjectID   `bson:"userId" json:"userId"`
+	ParentID       *primitive.ObjectID  `bson:"parentId,omitempty" json:"parentId,omitempty"`
+	Title          string               `bson:"title" json:"title"`
+	Description    string               `bson:"description" json:"description"`
+	Status         string               `bson:"status" json:"status"`
+	Progress       float64              `bson:"progress" json:"progress"`
+	EstimatedHours float64              `bson:"estimatedHours" json:"estimatedHours"`
+	SpentHours     float64              `bson:"spentHours" json:"spentHours"`
+	DueDate        *time.Time           `bson:"dueDate,omitempty" json:"dueDate,omitempty"`
+	Priority       string               `bson:"priority" json:"priority"`
+	Notes          string               `bson:"notes" json:"notes"`
+	Attachments    []EvidenceFile       `bson:"attachments" json:"attachments"`
+	Evidence       []EvidenceFile       `bson:"evidence" json:"evidence"`
+	DependsOn      []primitive.ObjectID `bson:"dependsOn" json:"dependsOn"`
+	Order          int                  `bson:"order" json:"order"`
+	CreatedAt      time.Time            `bson:"createdAt" json:"createdAt"`
+	UpdatedAt      time.Time            `bson:"updatedAt" json:"updatedAt"`
+}
+
+type UserPreferences struct {
+	ID              primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	UserID          primitive.ObjectID `bson:"userId" json:"userId"`
+	ThemePreset     string             `bson:"themePreset" json:"themePreset"`
+	AccentColor     string             `bson:"accentColor" json:"accentColor"`
+	BackgroundColor string             `bson:"backgroundColor" json:"backgroundColor"`
+	GradientFrom    string             `bson:"gradientFrom" json:"gradientFrom"`
+	GradientTo      string             `bson:"gradientTo" json:"gradientTo"`
+	GlassIntensity  float64            `bson:"glassIntensity" json:"glassIntensity"`
+	BorderRadius    string             `bson:"borderRadius" json:"borderRadius"`
+	FontFamily      string             `bson:"fontFamily" json:"fontFamily"`
+	ColorMode       string             `bson:"colorMode" json:"colorMode"`
+	CardDensity     string             `bson:"cardDensity" json:"cardDensity"`
+	DashboardLayout string             `bson:"dashboardLayout" json:"dashboardLayout"`
+	SidebarStyle    string             `bson:"sidebarStyle" json:"sidebarStyle"`
+	AnimationSpeed  string             `bson:"animationSpeed" json:"animationSpeed"`
+	ReduceMotion    bool               `bson:"reduceMotion" json:"reduceMotion"`
+	UpdatedAt       time.Time          `bson:"updatedAt" json:"updatedAt"`
+}
+
+type CompareShare struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	ShareID   string             `bson:"shareId" json:"shareId"`
+	UserAID   primitive.ObjectID `bson:"userAId" json:"userAId"`
+	UserBID   primitive.ObjectID `bson:"userBId" json:"userBId"`
+	GoalAID   *primitive.ObjectID `bson:"goalAId,omitempty" json:"goalAId,omitempty"`
+	GoalBID   *primitive.ObjectID `bson:"goalBId,omitempty" json:"goalBId,omitempty"`
+	Range     string             `bson:"range" json:"range"`
+	StartDate *time.Time         `bson:"startDate,omitempty" json:"startDate,omitempty"`
+	EndDate   *time.Time         `bson:"endDate,omitempty" json:"endDate,omitempty"`
+	CreatedAt time.Time          `bson:"createdAt" json:"createdAt"`
+}
+
