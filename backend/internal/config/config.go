@@ -8,10 +8,14 @@ type Config struct {
 	Port          string
 	MongoURI      string
 	MongoDatabase string
-	JWTSecret string
+	JWTSecret     string
 	// PublicAPIURL — URL công khai của API trên Render (vd. https://xxx.onrender.com).
 	// Dùng cho keep-alive tự ping /wake mỗi ~14 phút.
 	PublicAPIURL string
+	// Cloudinary
+	CloudinaryCloudName string
+	CloudinaryAPIKey    string
+	CloudinaryAPISecret string
 }
 
 func Load() Config {
@@ -23,11 +27,14 @@ func Load() Config {
 		mongoURI = "mongodb://localhost:27017"
 	}
 	return Config{
-		Port:          getEnv("PORT", "8080"),
-		MongoURI:      mongoURI,
-		MongoDatabase: getEnv("MONGODB_DATABASE", "mika_manager"),
-		JWTSecret:     getEnv("JWT_SECRET", "dev-secret-change-in-production"),
-		PublicAPIURL:  os.Getenv("PUBLIC_API_URL"),
+		Port:                getEnv("PORT", "8080"),
+		MongoURI:            mongoURI,
+		MongoDatabase:       getEnv("MONGODB_DATABASE", "mika_manager"),
+		JWTSecret:           getEnv("JWT_SECRET", "dev-secret-change-in-production"),
+		PublicAPIURL:        os.Getenv("PUBLIC_API_URL"),
+		CloudinaryCloudName: os.Getenv("CLOUDINARY_CLOUD_NAME"),
+		CloudinaryAPIKey:    os.Getenv("CLOUDINARY_API_KEY"),
+		CloudinaryAPISecret: os.Getenv("CLOUDINARY_API_SECRET"),
 	}
 }
 

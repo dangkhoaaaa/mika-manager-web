@@ -87,7 +87,62 @@ func (db *DB) ensureIndexes(ctx context.Context) error {
 		Keys:    bson.D{{Key: "projectId", Value: 1}, {Key: "version", Value: 1}},
 		Options: options.Index().SetUnique(true),
 	})
-	return err
+	if err != nil {
+		return err
+	}
+
+	// Progress Challenge indexes
+	pcIndexes := []struct {
+		coll    string
+		indexes []mongo.IndexModel
+	}{
+		{"goals", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "order", Value: 1}}},
+			{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "status", Value: 1}}},
+			{Keys: bson.D{{Key: "visibility", Value: 1}, {Key: "createdAt", Value: -1}}},
+		}},
+		{"daily_logs", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "date", Value: -1}}},
+			{Keys: bson.D{{Key: "goalId", Value: 1}, {Key: "date", Value: -1}}},
+			{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "goalId", Value: 1}, {Key: "date", Value: 1}}, Options: options.Index().SetUnique(true)},
+		}},
+		{"user_profiles", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "userId", Value: 1}}, Options: options.Index().SetUnique(true)},
+			{Keys: bson.D{{Key: "username", Value: 1}}, Options: options.Index().SetUnique(true).SetSparse(true)},
+		}},
+		{"follows", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "followerId", Value: 1}, {Key: "followingId", Value: 1}}, Options: options.Index().SetUnique(true)},
+			{Keys: bson.D{{Key: "followingId", Value: 1}}},
+		}},
+		{"likes", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "targetId", Value: 1}, {Key: "targetType", Value: 1}}, Options: options.Index().SetUnique(true)},
+		}},
+		{"comments", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "targetId", Value: 1}, {Key: "createdAt", Value: -1}}},
+		}},
+		{"cheers", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "targetId", Value: 1}, {Key: "createdAt", Value: -1}}},
+		}},
+		{"achievements", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "key", Value: 1}}, Options: options.Index().SetUnique(true)},
+		}},
+		{"pc_notifications", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "userId", Value: 1}, {Key: "createdAt", Value: -1}}},
+		}},
+		{"password_resets", []mongo.IndexModel{
+			{Keys: bson.D{{Key: "token", Value: 1}}, Options: options.Index().SetUnique(true)},
+			{Keys: bson.D{{Key: "email", Value: 1}}},
+		}},
+	}
+
+	for _, pc := range pcIndexes {
+		_, err = db.Collection(pc.coll).Indexes().CreateMany(ctx, pc.indexes)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (db *DB) Disconnect(ctx context.Context) error {

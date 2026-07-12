@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 14%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 5% 14%;
+    --muted-foreground: 240 5% 64%;
+    --accent: 240 5% 18%;
+    --accent-foreground: 0 0% 98%;
+    --border: 240 5% 18%;
+    --input: 240 5% 18%;
+    --ring: 239 84% 67%;
+    --radius: 0.75rem;
+    --bg-glow-1: 239 84% 67%;
+    --bg-glow-2: 280 84% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(var(--bg-glow-1) / 0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(var(--bg-glow-2) / 0.08), transparent);
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-card/60 backdrop-blur-xl border border-white/10;
+  }
+  .glass-strong {
+    @apply bg-card/80 backdrop-blur-2xl border border-white/10;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent;
+  }
+  [data-theme="pastel-green"] .gradient-text {
+    @apply from-green-300 via-emerald-300 to-teal-300;
+  }
+  [data-theme="rose"] .gradient-text {
+    @apply from-rose-400 via-pink-400 to-orange-300;
+  }
+  [data-theme="amber"] .gradient-text {
+    @apply from-amber-400 via-orange-400 to-yellow-300;
+  }
+  [data-theme="cyan"] .gradient-text {
+    @apply from-cyan-400 via-sky-400 to-blue-300;
+  }
+  .skeleton {
+    @apply animate-pulse bg-muted rounded-md;
+  }
+}
+
+/* Heatmap — indigo (default) */
+.heatmap-0 { @apply bg-muted/30; }
+.heatmap-1 { @apply bg-indigo-500/20; }
+.heatmap-2 { @apply bg-indigo-500/40; }
+.heatmap-3 { @apply bg-indigo-500/60; }
+.heatmap-4 { @apply bg-indigo-500/90; }
+
+[data-heatmap="green"] .heatmap-1, [data-heatmap="green"] .heatmap-preview[data-level="1"] { @apply bg-green-400/25; }
+[data-heatmap="green"] .heatmap-2, [data-heatmap="green"] .heatmap-preview[data-level="2"] { @apply bg-green-400/45; }
+[data-heatmap="green"] .heatmap-3, [data-heatmap="green"] .heatmap-preview[data-level="3"] { @apply bg-green-400/65; }
+[data-heatmap="green"] .heatmap-4, [data-heatmap="green"] .heatmap-preview[data-level="4"] { @apply bg-green-400/90; }
+
+[data-heatmap="rose"] .heatmap-1, [data-heatmap="rose"] .heatmap-preview[data-level="1"] { @apply bg-rose-400/25; }
+[data-heatmap="rose"] .heatmap-2, [data-heatmap="rose"] .heatmap-preview[data-level="2"] { @apply bg-rose-400/45; }
+[data-heatmap="rose"] .heatmap-3, [data-heatmap="rose"] .heatmap-preview[data-level="3"] { @apply bg-rose-400/65; }
+[data-heatmap="rose"] .heatmap-4, [data-heatmap="rose"] .heatmap-preview[data-level="4"] { @apply bg-rose-400/90; }
+
+[data-heatmap="amber"] .heatmap-1, [data-heatmap="amber"] .heatmap-preview[data-level="1"] { @apply bg-amber-400/25; }
+[data-heatmap="amber"] .heatmap-2, [data-heatmap="amber"] .heatmap-preview[data-level="2"] { @apply bg-amber-400/45; }
+[data-heatmap="amber"] .heatmap-3, [data-heatmap="amber"] .heatmap-preview[data-level="3"] { @apply bg-amber-400/65; }
+[data-heatmap="amber"] .heatmap-4, [data-heatmap="amber"] .heatmap-preview[data-level="4"] { @apply bg-amber-400/90; }
+
+[data-heatmap="cyan"] .heatmap-1, [data-heatmap="cyan"] .heatmap-preview[data-level="1"] { @apply bg-cyan-400/25; }
+[data-heatmap="cyan"] .heatmap-2, [data-heatmap="cyan"] .heatmap-preview[data-level="2"] { @apply bg-cyan-400/45; }
+[data-heatmap="cyan"] .heatmap-3, [data-heatmap="cyan"] .heatmap-preview[data-level="3"] { @apply bg-cyan-400/65; }
+[data-heatmap="cyan"] .heatmap-4, [data-heatmap="cyan"] .heatmap-preview[data-level="4"] { @apply bg-cyan-400/90; }
+
+.heatmap-preview[data-level="0"] { @apply bg-muted/30; }
+.heatmap-preview[data-level="1"] { @apply bg-indigo-500/20; }
+.heatmap-preview[data-level="2"] { @apply bg-indigo-500/40; }
+.heatmap-preview[data-level="3"] { @apply bg-indigo-500/60; }
+.heatmap-preview[data-level="4"] { @apply bg-indigo-500/90; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-muted rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground/50; }

@@ -38,3 +38,20 @@ func GetUserID(ctx context.Context) string {
 	v, _ := ctx.Value(UserIDKey).(string)
 	return v
 }
+
+func OptionalJWT(secret string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			header := r.Header.Get("Authorization")
+			if header != "" && strings.HasPrefix(header, "Bearer ") {
+				token := strings.TrimPrefix(header, "Bearer ")
+				if claims, err := auth.ParseToken(token, secret); err == nil {
+					ctx := context.WithValue(r.Context(), UserIDKey, claims.UserID)
+					ctx = context.WithValue(ctx, UserEmailKey, claims.Email)
+					r = r.WithContext(ctx)
+				}
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}

@@ -20,6 +20,7 @@ func main() {
 	_ = godotenv.Load()
 
 	cfg := config.Load()
+	log.Printf("mongodb database: %s", cfg.MongoDatabase)
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
